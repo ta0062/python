@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "✅ Flask app is running successfully on EC2 with PM2!"
+    return "✅ Flask app running successfully on EC2 with PM2!"
 
 @app.route('/api/time')
 def get_time():
