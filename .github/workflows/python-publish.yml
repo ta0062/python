@@ -41,7 +41,17 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
+            echo "Listing all files and folders in home directory"
             ls
+            echo " activate virtual environment"
+            source myenv/bin/activate
+
+            echo "Going inside code"
             cd phyton-deployment
+            echo "Listing all files and folders in code folder"
             ls
+            echo "install requiretment.txt"
+            pip install -r requirements.txt
+            echo "restarting code"
+            pm2 restart 0
  
