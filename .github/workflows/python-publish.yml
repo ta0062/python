@@ -10,23 +10,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1 — Checkout your repo code
+      # Step 1 — Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Step 2 — Copy files from GitHub to EC2 (target path)
+      # Step 2 — Copy files to EC2 (exclude .git and unnecessary folders)
       - name: Copy files to EC2
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
-          source: "."             # copy everything from the repo
-          target: "/home/ubuntu/phyton-deployment"  # your target folder on EC2
+          source: "."
+          target: "/home/ubuntu/phyton-deployment"
           overwrite: true
           strip_components: 0
+          rm: true
+          exclude: |
+            .git/
+            .github/
+            .gitignore
+            venv/
+            __pycache__/
 
-      # Step 3 — SSH into EC2 and restart your Flask app
+      # Step 3 — SSH into EC2, install dependencies, and restart Flask app
       - name: Deploy on EC2
         uses: appleboy/ssh-action@v1.1.0
         with:
